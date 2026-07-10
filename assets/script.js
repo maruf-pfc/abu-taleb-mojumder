@@ -2,15 +2,26 @@
 document.addEventListener('DOMContentLoaded', () => {
   // mobile nav toggle
   const toggle = document.querySelector('.nav-toggle');
-  const links = document.querySelector('.nav-links');
-  if (toggle && links) {
+  const wrapper = document.querySelector('.nav-links-wrapper');
+  if (toggle && wrapper) {
     toggle.addEventListener('click', () => {
-      const open = links.classList.toggle('open');
+      const open = wrapper.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.style.overflow = open ? 'hidden' : '';
     });
-    links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-      links.classList.remove('open');
+    // close if clicking backdrop overlay itself
+    wrapper.addEventListener('click', (e) => {
+      if (e.target === wrapper) {
+        wrapper.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+    // close when a navigation link is clicked
+    wrapper.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => {
+      wrapper.classList.remove('open');
       toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
     }));
   }
 
