@@ -305,9 +305,10 @@ section{ padding:64px 0; }
 }
 .toc-list li{ border-bottom:1px solid var(--rule); }
 .toc-list a{
-  display:flex; align-items:center; gap:22px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
   padding:18px 6px;
   transition:padding-left .25s ease, color .25s ease;
+  flex-wrap:wrap;
 }
 .toc-list a:hover{ padding-left:16px; color:var(--maroon); }
 .toc-num{
@@ -452,6 +453,9 @@ section{ padding:64px 0; }
   .card-grid{ grid-template-columns:1fr 1fr; }
   .excerpt-block{ grid-template-columns:1fr; padding:36px 26px; }
   .hero-seal{ max-width:220px; }
+  .portrait-frame { max-width: 360px; margin: 0 auto 28px; }
+  .fact-list { max-width: 360px; margin: 26px auto 0; }
+  #contact-form { max-width: 650px; width: 100%; }
 }
 @media (max-width: 720px){
   .nav-links-wrapper {
@@ -506,6 +510,11 @@ section{ padding:64px 0; }
   .card-grid{ grid-template-columns:1fr; }
   .fact-list .value{ text-align:left; }
   .fact-list li{ flex-direction:column; gap:2px; }
+}
+@media (max-width: 480px) {
+  .contact-info { padding: 20px; }
+  .excerpt-block { padding: 28px 20px; }
+  .nav-links { width: 240px; }
 }
 @media (max-width: 380px) {
   .brand-title { font-size: 0.95rem; }
