@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://abu-taleb-mojumder.vercel.app/sitemap.xml
