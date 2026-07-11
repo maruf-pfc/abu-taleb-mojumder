@@ -417,7 +417,7 @@ section{ padding:64px 0; }
 .contact-line{ display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--rule); align-items:flex-start; }
 .contact-line:last-child{ border-bottom:none; }
 .contact-line .k{ font-family:var(--font-en-util); font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); min-width:9ch; padding-top:2px;}
-.contact-line .v{ font-family:var(--font-bn-serif); font-size:1.05rem; }
+.contact-line .v{ font-family:var(--font-bn-serif); font-size:1.05rem; word-break:break-all; overflow-wrap:break-word; min-width:0; }
 .form-note{ margin-top:16px; font-size:.85rem; color:var(--ink-faint); font-family:var(--font-en-util); }
 
 /* ---------------- footer ---------------- */
@@ -513,6 +513,8 @@ section{ padding:64px 0; }
 }
 @media (max-width: 480px) {
   .contact-info { padding: 20px; }
+  .contact-line { flex-direction: column; gap: 4px; }
+  .contact-line .k { min-width: auto; }
   .excerpt-block { padding: 28px 20px; }
   .nav-links { width: 240px; }
 }
