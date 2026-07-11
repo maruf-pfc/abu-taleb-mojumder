@@ -43,6 +43,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // contact form handling with inline validation & accessible announcement
   const form = document.querySelector('#contact-form');
+  const status = document.querySelector('#form-status');
+  
+  if (status) {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('success') === 'true') {
+      status.style.color = 'var(--green)';
+      status.textContent = 'ধন্যবাদ। আপনার বার্তাটি সফলভাবে পাঠানো হয়েছে!';
+    } else if (urlParams.get('error')) {
+      status.style.color = 'var(--maroon)';
+      status.textContent = decodeURIComponent(urlParams.get('error'));
+    }
+  }
+
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -60,10 +73,47 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (status) {
-        status.style.color = 'var(--green)';
-        status.textContent = 'ধন্যবাদ। আপনার বার্তাটি সফলভাবে পাঠানো হয়েছে (সিমুলেশন)।';
+        status.style.color = 'var(--ink-soft)';
+        status.textContent = 'বার্তা পাঠানো হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...';
       }
-      form.reset();
+
+      const payload = {
+        name: name.value,
+        email: email.value,
+        subject: document.querySelector('#subject') ? document.querySelector('#subject').value : '',
+        message: message.value
+      };
+      
+      fetch(form.action, {
+        method: form.method,
+        body: JSON.stringify(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          if (status) {
+            status.style.color = 'var(--green)';
+            status.textContent = 'ধন্যবাদ। আপনার বার্তাটি সফলভাবে পাঠানো হয়েছে!';
+          }
+          form.reset();
+        } else {
+          response.json().then(data => {
+            if (status) {
+              status.style.color = 'var(--maroon)';
+              status.textContent = data.message || 'দুঃখিত, কোনো ত্রুটি ঘটেছে। আবার চেষ্টা করুন।';
+            }
+          });
+        }
+      })
+      .catch(error => {
+        if (status) {
+          status.style.color = 'var(--maroon)';
+          status.textContent = 'নেটওয়ার্কের সমস্যা হয়েছে। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।';
+        }
+      });
     });
   }
 

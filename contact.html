@@ -68,7 +68,7 @@
 
   <section style="padding-top:10px;" aria-label="যোগাযোগ মাধ্যম">
     <div class="wrap contact-grid">
-      <form id="contact-form" class="reveal" novalidate>
+      <form id="contact-form" class="reveal" action="/api/submit" method="POST" novalidate>
         <div class="field">
           <label for="name">নাম <span style="color: var(--maroon);">*</span></label>
           <input type="text" id="name" name="name" required autocomplete="name" placeholder="আপনার নাম">
