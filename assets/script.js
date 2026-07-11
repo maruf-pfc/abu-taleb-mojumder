@@ -66,4 +66,102 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
     });
   }
+
+  // Writings Modal Reader
+  const modal = document.querySelector('#reader-modal');
+  const modalClose = document.querySelector('#modal-close');
+  const modalTitle = document.querySelector('#modal-title');
+  const modalText = document.querySelector('#modal-text');
+  const modalEyebrow = document.querySelector('#modal-eyebrow');
+  let lastActiveElement = null;
+
+  if (modal && modalClose) {
+    const openModal = (id, title, tag) => {
+      const template = document.querySelector(`#template-${id}`);
+      if (!template) return;
+      
+      lastActiveElement = document.activeElement;
+      
+      // Load content
+      modalTitle.textContent = title;
+      modalEyebrow.textContent = tag;
+      modalText.innerHTML = '';
+      modalText.appendChild(template.content.cloneNode(true));
+      
+      // Open modal
+      modal.removeAttribute('hidden');
+      setTimeout(() => {
+        modal.classList.add('open');
+      }, 10);
+      document.body.style.overflow = 'hidden';
+      
+      // Focus close button for accessibility
+      modalClose.focus();
+    };
+
+    const closeModal = () => {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      
+      setTimeout(() => {
+        if (!modal.classList.contains('open')) {
+          modal.setAttribute('hidden', 'true');
+          modalTitle.textContent = '';
+          modalEyebrow.textContent = '';
+          modalText.innerHTML = '';
+          if (lastActiveElement) {
+            lastActiveElement.focus();
+          }
+        }
+      }, 350);
+    };
+
+    // Attach click events to "সম্পূর্ণ পড়ুন" buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-read');
+      if (btn) {
+        const id = btn.getAttribute('data-id');
+        const card = btn.closest('.writing-card');
+        const title = card.querySelector('h3').textContent;
+        const tag = card.querySelector('.card-tag').textContent;
+        openModal(id, title, tag);
+      }
+    });
+
+    // Close buttons
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Keyboard Accessibility (Esc to close, tab trapping)
+    document.addEventListener('keydown', (e) => {
+      if (modal.classList.contains('open')) {
+        if (e.key === 'Escape') {
+          closeModal();
+        }
+
+        if (e.key === 'Tab') {
+          const focusables = modal.querySelectorAll('button, [tabindex="0"]');
+          const first = focusables[0];
+          const last = focusables[focusables.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              last.focus();
+              e.preventDefault();
+            }
+          } else {
+            if (document.activeElement === last) {
+              first.focus();
+              e.preventDefault();
+            }
+          }
+        }
+      }
+    });
+  }
 });
+

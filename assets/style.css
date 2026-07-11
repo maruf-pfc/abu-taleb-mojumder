@@ -525,6 +525,185 @@ section{ padding:64px 0; }
   .brand-seal { width: 36px; height: 36px; }
 }
 
+/* ---------------- writings page ---------------- */
+.writings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 32px;
+  margin-top: 40px;
+}
+.writing-card {
+  background: var(--paper-2);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.writing-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--brass-bright);
+  box-shadow: 0 24px 48px -18px rgba(22, 20, 14, 0.6);
+}
+.writing-card .card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.writing-card .card-num {
+  font-family: var(--font-en-display);
+  font-style: italic;
+  color: var(--brass);
+  font-size: 1.3rem;
+}
+.writing-card .card-tag {
+  font-family: var(--font-en-util);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(31, 74, 97, 0.06);
+  color: var(--green);
+  border: 1px solid rgba(31, 74, 97, 0.15);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.writing-card h3 {
+  font-size: 1.4rem;
+  margin: 0 0 12px;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.writing-card .card-excerpt {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+.writing-card .btn-read {
+  align-self: flex-start;
+  font-family: var(--font-en-util);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--maroon);
+  padding-bottom: 2px;
+  transition: color 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--maroon);
+}
+.writing-card .btn-read:hover {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* --- Reader Modal --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(34, 30, 23, 0.45);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-wrapper {
+  background: var(--cream);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius);
+  max-width: 680px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+  transform: translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.modal-overlay.open .modal-wrapper {
+  transform: translateY(0);
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.modal-header .eyebrow {
+  margin: 0;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink-soft);
+  padding: 4px;
+  transition: color 0.25s ease;
+}
+.modal-close:hover {
+  color: var(--maroon);
+}
+.modal-body {
+  padding: 32px;
+  overflow-y: auto;
+  font-family: var(--font-bn-serif);
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.modal-body h2 {
+  font-size: 1.8rem;
+  margin-top: 0;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+.modal-body p {
+  margin: 0 0 20px;
+}
+.modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 720px) {
+  .modal-overlay {
+    padding: 16px;
+  }
+  .modal-wrapper {
+    max-height: 90vh;
+  }
+  .modal-header {
+    padding: 20px 24px 12px;
+  }
+  .modal-body {
+    padding: 24px;
+    font-size: 1.08rem;
+  }
+  .modal-body h2 {
+    font-size: 1.6rem;
+    margin-bottom: 18px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
   .ink-path, .ink-dot{ animation:none !important; stroke-dashoffset:0; opacity:1; }
