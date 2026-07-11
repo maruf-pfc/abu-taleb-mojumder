@@ -77,50 +77,59 @@ document.addEventListener('DOMContentLoaded', () => {
         status.textContent = 'বার্তা পাঠানো হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...';
       }
 
-      const payload = {
-        name: name.value,
-        email: email.value,
-        subject: document.querySelector('#subject') ? document.querySelector('#subject').value : '',
-        message: message.value
-      };
-      
-      fetch(form.action, {
-        method: form.method,
-        body: JSON.stringify(payload),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      })
-      .then(response => {
-        if (response.ok) {
-          if (status) {
-            status.style.color = 'var(--green)';
-            status.textContent = 'ধন্যবাদ। আপনার বার্তাটি সফলভাবে পাঠানো হয়েছে!';
+      // Fetch the access key from serverless endpoint to keep it out of source code
+      fetch('/api/key')
+        .then(res => {
+          if (!res.ok) throw new Error('Could not fetch access key');
+          return res.json();
+        })
+        .then(keyData => {
+          const payload = {
+            access_key: keyData.key,
+            name: name.value,
+            email: email.value,
+            subject: document.querySelector('#subject') ? document.querySelector('#subject').value : '',
+            message: message.value
+          };
+
+          return fetch(form.action, {
+            method: form.method,
+            body: JSON.stringify(payload),
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          });
+        })
+        .then(response => {
+          if (response.ok) {
+            if (status) {
+              status.style.color = 'var(--green)';
+              status.textContent = 'ধন্যবাদ। আপনার বার্তাটি সফলভাবে পাঠানো হয়েছে!';
+            }
+            form.reset();
+          } else {
+            response.json()
+              .then(data => {
+                if (status) {
+                  status.style.color = 'var(--maroon)';
+                  status.textContent = data.message || 'দুঃখিত, কোনো ত্রুটি ঘটেছে। আবার চেষ্টা করুন।';
+                }
+              })
+              .catch(() => {
+                if (status) {
+                  status.style.color = 'var(--maroon)';
+                  status.textContent = 'সার্ভার সংযোগে সমস্যা হয়েছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
+                }
+              });
           }
-          form.reset();
-        } else {
-          response.json()
-            .then(data => {
-              if (status) {
-                status.style.color = 'var(--maroon)';
-                status.textContent = data.message || 'দুঃখিত, কোনো ত্রুটি ঘটেছে। আবার চেষ্টা করুন।';
-              }
-            })
-            .catch(() => {
-              if (status) {
-                status.style.color = 'var(--maroon)';
-                status.textContent = 'সার্ভার সংযোগে সমস্যা হয়েছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
-              }
-            });
-        }
-      })
-      .catch(error => {
-        if (status) {
-          status.style.color = 'var(--maroon)';
-          status.textContent = 'নেটওয়ার্কের সমস্যা হয়েছে। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।';
-        }
-      });
+        })
+        .catch(error => {
+          if (status) {
+            status.style.color = 'var(--maroon)';
+            status.textContent = 'সার্ভার সংযোগ বা নেটওয়ার্কের সমস্যা হয়েছে। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।';
+          }
+        });
     });
   }
 
