@@ -1,0 +1,44 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Changelog Details
+        id: changelog
+        run: |
+          echo "## 📖 Project Overview" > release_body.md
+          echo "মোঃ আবু তালেব মজুমদার-এর প্রথম প্রকাশিত কাব্যগ্রন্থ **\"আবু তালেবের কবিতাবলি\"** এবং অন্যান্য রচনার জন্য একটি নিবেদিত ও নান্দনিক ৫-পৃষ্ঠার পোর্টফোলিও ওয়েবসাইট।" >> release_body.md
+          echo "" >> release_body.md
+          echo "## 🚀 Version Details" >> release_body.md
+          echo "- **index.html (হোম)**: Book-style cover page, handwritten signature animation, and selected poems." >> release_body.md
+          echo "- **about.html (আমার কথা)**: Poet biography, dedication, and book publication details." >> release_body.md
+          echo "- **poems.html (কবিতা)**: Linked table of contents for all 20 poems with custom stanza layouts." >> release_body.md
+          echo "- **writings.html (অন্যান্য রচনা)**: Prose writings list with an elegant book-style Lightbox Modal Reader." >> release_body.md
+          echo "- **contact.html (যোগাযোগ)**: Contact form securely relayed through a serverless API route to prevent key exposure." >> release_body.md
+          echo "" >> release_body.md
+          echo "## 🛠️ Integrations & Specifications" >> release_body.md
+          echo "- **Form Relay**: Fetches keys dynamically from \`/api/key\` and submits client-side to bypass Vercel IP blocks." >> release_body.md
+          echo "- **SEO & Metadata**: JSON-LD Structured Schema (Person, Book, CollectionPage), canonical tags, OpenGraph cards." >> release_body.md
+          echo "- **Telemetry**: Integrated Vercel Web Analytics and Speed Insights." >> release_body.md
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release_body.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
