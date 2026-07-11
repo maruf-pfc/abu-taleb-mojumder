@@ -100,12 +100,19 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           form.reset();
         } else {
-          response.json().then(data => {
-            if (status) {
-              status.style.color = 'var(--maroon)';
-              status.textContent = data.message || 'দুঃখিত, কোনো ত্রুটি ঘটেছে। আবার চেষ্টা করুন।';
-            }
-          });
+          response.json()
+            .then(data => {
+              if (status) {
+                status.style.color = 'var(--maroon)';
+                status.textContent = data.message || 'দুঃখিত, কোনো ত্রুটি ঘটেছে। আবার চেষ্টা করুন।';
+              }
+            })
+            .catch(() => {
+              if (status) {
+                status.style.color = 'var(--maroon)';
+                status.textContent = 'সার্ভার সংযোগে সমস্যা হয়েছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
+              }
+            });
         }
       })
       .catch(error => {

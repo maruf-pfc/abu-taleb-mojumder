@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
     return res.status(405).json({ message: 'Method Not Allowed' });
@@ -52,4 +52,4 @@ export default async function handler(req, res) {
       return res.redirect(303, `/contact.html?error=${encodeURIComponent(error.message)}`);
     }
   }
-}
+};
