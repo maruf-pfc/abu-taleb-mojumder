@@ -27,7 +27,17 @@ module.exports = async function handler(req, res) {
       })
     });
 
-    const data = await response.json();
+    const responseText = await response.text();
+    let data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      return res.status(500).json({
+        message: 'Invalid response from Web3Forms API',
+        error: e.message,
+        body: responseText.slice(0, 500)
+      });
+    }
 
     const isAjax = req.headers.accept && req.headers.accept.includes('application/json');
 
